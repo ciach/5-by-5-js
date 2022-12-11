@@ -6,6 +6,57 @@ const state = {
     currentCol: 0,
 }
 
+const tempWords = ['abstrakt', 
+    'abstynent',
+    'absurd',
+    'absyd',
+    'absyncik',
+    'absynt',
+    'abszach',
+    'abszicfajer',
+    'abszmak',
+    'absznyt',
+    'absztyfikant',
+    'abszyt',
+    'abucht',
+    'abudżańczyk',
+    'abudżyjczyk',
+    'abulik',
+    'abundyzm',
+    'abur',
+    'abuz',
+    'abysal',
+    'abzac',
+    'acan',
+    'acanek',
+    'acani',
+    'acetal',
+    'plisa',
+    'plita',
+    'płosa',
+    'plota',
+    'płyta',
+    'podaż',
+    'pogoń',
+    'połać',
+    'połać',
+    'polej',
+    'polka',
+    'półka',
+    'półoś',
+    'pomoc',
+    'pompa',
+    'possa',
+    'potka',
+    'praca',
+    'prana',
+    'prasa',
+    'pręga',
+    'próba',
+    'proca',
+];
+
+
 function updateGrid() {
     for (let row = 0; row < 5; row++) {
         for (let col = 0; col < 5; col++) {
@@ -27,13 +78,29 @@ function drawBox(container, row, col, letter = '') {
     return box;
 }
 
-function setFirstWord() {
-    // Set the first word in the second row
-    state.grid[2][0] = 'H';
-    state.grid[2][1] = 'E';
-    state.grid[2][2] = 'L';
-    state.grid[2][3] = 'L';
-    state.grid[2][4] = 'O';
+
+    
+// function to find the first word in the array
+function findFirstWord(words) {
+    // find all words with 5 letters
+    const words5 = words.filter(word => word.length === 5);
+    // log to console the array with 5 letters words
+    console.log(words5);
+    // return random word from the array
+    return words5[Math.floor(Math.random() * words5.length)];
+}
+
+
+function setFirstWord(word) {
+    // check if word has lenght of 5
+    if (word.length !== 5) {
+        alert('Please enter a word with 5 letters');
+    } else {
+        // set the first word in third row
+        for (let i = 0; i < 5; i++) {
+            state.grid[2][i] = word[i];
+        } 
+    }
     updateGrid();
 }
 
@@ -60,8 +127,22 @@ function handleBoxClick(event) {
     if (state.grid[row][col] === '') {
         // Ask the user for a letter
         const letter = prompt('Enter a letter');
-        // Update the box with the letter
-        updateBox(letter, row, col);
+        // verify if input is not null
+        if (letter === null) {
+            alert('Please enter a letter');
+        }
+        // verify is input is a letter
+        else if (letter.length !== 1 || !letter.match(/[a-z]/i)) {
+            alert('Please enter a letter');
+        }
+        // verify the letter is a single character
+        else if (letter.length !== 1) {
+            alert('Please enter a single letter');
+        } 
+        else {
+            // Update the box with the letter
+            updateBox(letter, row, col);
+        }
     }
 }
 
@@ -83,27 +164,6 @@ function drawGrid(container) {
     container.appendChild(grid)
 }
 
-function startup() {
-    const game = document.getElementById('game');
-    drawGrid(game);
-
-    state.grid = Array(5)
-        .fill()
-        .map(() => Array(5).fill(''));
-    updateGrid();
-}
-
-
-function drawGrid(container) {
-    const grid = document.createElement('div');
-    grid.className = 'grid';
-    for (let row = 0; row < 5; row++) {
-        for (let col = 0; col < 5; col++) {
-            drawBox(grid, row, col);
-        }
-    }
-    container.appendChild(grid)
-}
 
 function startup() {
     const game = document.getElementById('game');
@@ -116,7 +176,9 @@ function startup() {
 }
 
 
+// log to console lenght of the array
+console.log(tempWords.length);
 startup();
-setFirstWord();
-addLetter('A', 3, 4);
+setFirstWord(findFirstWord(tempWords));
+//addLetter('A', 3, 4);
 addEventListeners();
